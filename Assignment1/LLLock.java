@@ -1,12 +1,19 @@
+/* 
+Author: Abdullah Al-Wadeiah
+Class: CPSC 561, Distributed Algorithms
+
+This implementation of LLLock uses Lamport's Bakery algorithm.
+The following was used as a reference:
+    The Art of Multiprocessor Programming by Maurice Herlihy and Nir Shavit, page 32
+*/
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/* This implementation of LLLock uses Lamport's Bakery algorithm
-*/
 public class LLLock {
-    public volatile List<Boolean> flag;
-    public volatile List<Integer> ticket;
+    private volatile List<Boolean> flag;
+    private volatile List<Integer> ticket;
 
     public LLLock(int n){
         flag = new ArrayList<>();
@@ -22,7 +29,7 @@ public class LLLock {
         // Execute doorway() to get ticket number
         doorway(id);
         for(int k = 1; k <= flag.size(); k++){
-           while(flag.get(k) && (ticket.get(k) <= ticket.get(id) || k < id)) { /* do nothing */ }
+           while(flag.get(k) && (ticket.get(k) < ticket.get(id) || ( ticket.get(k) == ticket.get(id) && k < id))) { /* do nothing */ }
         }
     }
 
