@@ -30,7 +30,7 @@ public class OTLock {
     public boolean lock(){
         if (lockAcquired) return false;
 
-        int id = (int) Thread.currentThread().getId();
+        int id = (int) Thread.currentThread().getId() % numberOfThreads;
         
         for(int i = 0; i < numberOfThreads; i++){
             level.set(id, i);

@@ -14,10 +14,12 @@ import java.util.Collections;
 public class LLLock {
     private volatile List<Boolean> flag;
     private volatile List<Integer> ticket;
+    private static int numberOfThreads;
 
     public LLLock(int n){
         flag = new ArrayList<>();
         ticket = new ArrayList<>();
+        numberOfThreads = n;
 
         for(int i = 0; i < n; i++){
             flag.add(false);
@@ -25,8 +27,9 @@ public class LLLock {
         }
     }
 
-    public void lock(int id){
+    public void lock(){
         // Execute doorway() to get ticket number
+        int id = (int) Thread.currentThread().getId() % numberOfThreads;
         doorway(id);
         for(int k = 1; k <= flag.size(); k++){
            while(flag.get(k) && (ticket.get(k) < ticket.get(id) || ( ticket.get(k) == ticket.get(id) && k < id))) { /* do nothing */ }
