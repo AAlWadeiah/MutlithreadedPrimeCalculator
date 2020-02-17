@@ -7,23 +7,21 @@ The following was used as a reference:
     The Art of Multiprocessor Programming by Maurice Herlihy and Nir Shavit, page 29
 */
 
-import java.util.List;
-import java.util.ArrayList;
-
 public class OTLock {
-    private volatile List<Integer> level;
-    private volatile List<Integer> victim;
+    private volatile int[] level;
+    private volatile int[] victim;
     private int numberOfThreads;
     private boolean lockAcquired;
     
     public OTLock(int n){
-        level = new ArrayList<>();
-        victim = new ArrayList<>();
+        level = new int[n];
+        victim = new int[n];
         numberOfThreads = n;
         lockAcquired = false;
 
         for(int i = 0; i < n; i++){
-            level.add(0);
+            level[i] = 0;
+            victim[i] = 0;
         }
     }
 
@@ -33,18 +31,18 @@ public class OTLock {
         int id = (int) Thread.currentThread().getId() % numberOfThreads;
         
         for(int i = 0; i < numberOfThreads; i++){
-            level.set(id, i);
-            victim.set(i, id);
+            level[id] = i;
+            victim[i] = id;
             for(int k = 0; k < numberOfThreads; k++)
-                while(k != id && level.get(k) >= i && victim.get(i) == id ) {/* do nothing*/}
+                while(k != id && level[k] >= i && victim[i] == id ) {/* do nothing*/}
         }
 
         if (lockAcquired){
-            level.set(id, 0);
+            level[id] = 0;
             return false;
         } else {
             lockAcquired = true;
-            level.set(id, 0);
+            level[id] = 0;
             return true;
         }
     }
