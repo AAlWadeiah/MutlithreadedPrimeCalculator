@@ -1,16 +1,22 @@
 public class PrintPrimes2 implements Runnable{
 
     private OTLock[] locks;
-    private int upperLimit;
+    private int lowerLimit;
 
-    public PrintPrimes2(OTLock[] locks, int upper){
+    public PrintPrimes2(OTLock[] locks, int lower){
         this.locks = locks;
-        this.upperLimit = upper;
+        this.lowerLimit = lower;
     }
 
     @Override
     public void run() {
-        
+        int num;
+        for (int i = 0; i < locks.length; i++) {
+            if(locks[i].lock()){
+                num = lowerLimit + i;
+                if(isPrime(num)) System.out.println(num);
+            }
+        }
 
     }
 

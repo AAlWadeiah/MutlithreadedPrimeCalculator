@@ -20,8 +20,8 @@ public class OTLock {
         lockAcquired = false;
 
         for(int i = 0; i < n; i++){
-            level[i] = 0;
-            victim[i] = 0;
+            level[i] = -1;
+            victim[i] = -1;
         }
     }
 
@@ -30,7 +30,7 @@ public class OTLock {
 
         int id = (int) Thread.currentThread().getId() % numberOfThreads;
         
-        for(int i = 0; i < numberOfThreads; i++){
+        for(int i = 1; i < numberOfThreads; i++){
             level[id] = i;
             victim[i] = id;
             for(int k = 0; k < numberOfThreads; k++)
