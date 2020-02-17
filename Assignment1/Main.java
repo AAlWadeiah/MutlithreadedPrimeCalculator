@@ -5,15 +5,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Main {
     private static int lowerLimit, upperLimit, numberOfThreads;
     public static volatile int sharedCtr;
+    private static long[] runtimes = new long[3]; 
 
     public static void main(String[] args) {
         int L = 10000;
-        numberOfThreads = 16;
+        numberOfThreads = 1;
         lowerLimit = (int) Math.floor(L / 2);
         upperLimit = L;
-        sharedCtr = lowerLimit;
         
+        System.out.println("============== Running LLLock Implementation ==============");
+        testLLLock();
+        System.out.println("============== Running OTLock Implementation ==============");
+        testOTLock();
+        System.out.println("============== Running Atomic Counter Implementation ==============");
         testAtomicCounter();
+
+        System.out.println(String.format("Runtimes: \n LLLock: {0} \n OTLock: {1} \n Atomic Counter: {2}", runtimes[0], runtimes[1], runtimes[2]));
     }
 
     public static void testAtomicCounter(){
@@ -38,7 +45,7 @@ public class Main {
 
         long stop = System.currentTimeMillis();
         long runtime = stop - start;
-        System.out.println("Total runtime was " + runtime + " milliseconds");
+        runtimes[2] = runtime;
 
     }
 
@@ -69,14 +76,15 @@ public class Main {
 
         long stop = System.currentTimeMillis();
         long runtime = stop - start;
-        System.out.println("Total runtime was " + runtime + " milliseconds"); 
+        runtimes[1] = runtime; 
 
     }
     
     public static void testLLLock(){
-        List<Thread> threads = new ArrayList<>();
+        sharedCtr = lowerLimit;
         LLLock lock = new LLLock(numberOfThreads);
-
+        
+        List<Thread> threads = new ArrayList<>();
         long start = System.currentTimeMillis();
         for (int i = 0; i < numberOfThreads; i++) {
             Thread t = new Thread(new PrintPrimes1(lock, upperLimit));
@@ -95,9 +103,6 @@ public class Main {
 
         long stop = System.currentTimeMillis();
         long runtime = stop - start;
-        System.out.println("Total runtime was " + runtime + " milliseconds");
-
-        // Reset shared counter
-        sharedCtr = lowerLimit;
+        runtimes[0] = runtime;
     }
 }
