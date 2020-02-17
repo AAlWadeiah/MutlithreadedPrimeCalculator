@@ -36,8 +36,8 @@ public class LLLock {
         }
     }
 
-    public void unlock(int id){
-        flag.set(id, false);
+    public void unlock(){
+        flag.set( (int) getThreadID(), false);
     }
 
     private void doorway(int id){
