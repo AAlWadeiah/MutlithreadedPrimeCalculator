@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
     private static int lowerLimit, upperLimit, numberOfThreads;
@@ -7,16 +8,37 @@ public class Main {
 
     public static void main(String[] args) {
         int L = 10000;
-        numberOfThreads = 32;
+        numberOfThreads = 16;
         lowerLimit = (int) Math.floor(L / 2);
         upperLimit = L;
         sharedCtr = lowerLimit;
-
-        testOTLock();
         
+        testAtomicCounter();
     }
 
-    public static void testAtomicInteger(){
+    public static void testAtomicCounter(){
+        AtomicInteger atomicCtr = new AtomicInteger(lowerLimit);
+
+        List<Thread> threads = new ArrayList<>();
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < numberOfThreads; i++) {
+            Thread t = new Thread(new PrintPrimes3(atomicCtr, upperLimit));
+            t.start();
+            threads.add(t);
+        }
+
+        // Wait for all threads to finish
+        for (Thread t : threads) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        long stop = System.currentTimeMillis();
+        long runtime = stop - start;
+        System.out.println("Total runtime was " + runtime + " milliseconds");
 
     }
 
@@ -30,7 +52,7 @@ public class Main {
 
         List<Thread> threads = new ArrayList<>();
         long start = System.currentTimeMillis();
-        for (int i = 0; i < numberOfThreads; ++i) {
+        for (int i = 0; i < numberOfThreads; i++) {
             Thread t = new Thread(new PrintPrimes2(locks, lowerLimit));
             t.start();
             threads.add(t);
@@ -56,7 +78,7 @@ public class Main {
         LLLock lock = new LLLock(numberOfThreads);
 
         long start = System.currentTimeMillis();
-        for (int i = 0; i < numberOfThreads; ++i) {
+        for (int i = 0; i < numberOfThreads; i++) {
             Thread t = new Thread(new PrintPrimes1(lock, upperLimit));
             t.start();
             threads.add(t);

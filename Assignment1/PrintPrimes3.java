@@ -12,7 +12,11 @@ public class PrintPrimes3 implements Runnable{
     
     @Override
     public void run() {
-        
+        int n = 0;
+        while (n <= upperLimit) {
+            n = sharedCtr.getAndIncrement();
+            if(isPrime(n)) System.out.println(n);
+        }
 
     }
     
