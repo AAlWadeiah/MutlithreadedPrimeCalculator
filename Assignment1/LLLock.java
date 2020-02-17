@@ -29,7 +29,7 @@ public class LLLock {
 
     public void lock(){
         // Execute doorway() to get ticket number
-        int id = (int) Thread.currentThread().getId() % numberOfThreads;
+        int id = (int) getThreadID();
         doorway(id);
         for(int k = 1; k <= flag.size(); k++){
            while(flag.get(k) && (ticket.get(k) < ticket.get(id) || ( ticket.get(k) == ticket.get(id) && k < id))) { /* do nothing */ }
@@ -45,4 +45,6 @@ public class LLLock {
         Integer max = Collections.max(ticket);
         ticket.set(id, max + 1);
     }
+
+    private long getThreadID(){ return Thread.currentThread().getId() % numberOfThreads; }
 }
