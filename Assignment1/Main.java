@@ -8,19 +8,19 @@ public class Main {
     private static long[] runtimes = new long[3]; 
 
     public static void main(String[] args) {
-        int L = 10000;
+        int L = 1000000;
         numberOfThreads = 1;
         lowerLimit = (int) Math.floor(L / 2);
         upperLimit = L;
         
-        System.out.println("============== Running LLLock Implementation ==============");
+        System.out.println("============== Running LLLock Implementation *VERY SLOW FOR HIGH THREAD COUNTS* ==============");
         testLLLock();
         System.out.println("============== Running OTLock Implementation ==============");
         testOTLock();
         System.out.println("============== Running Atomic Counter Implementation ==============");
         testAtomicCounter();
 
-        System.out.println(String.format("Runtimes: \n LLLock: {0} \n OTLock: {1} \n Atomic Counter: {2}", runtimes[0], runtimes[1], runtimes[2]));
+        System.out.println(String.format("Runtimes: \n LLLock: %d \n OTLock: %d \n Atomic Counter: %d", runtimes[0], runtimes[1], runtimes[2]));
     }
 
     public static void testAtomicCounter(){
