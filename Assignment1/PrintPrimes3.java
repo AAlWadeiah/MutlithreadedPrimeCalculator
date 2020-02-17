@@ -3,11 +3,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PrintPrimes3 implements Runnable{
 
     private AtomicInteger sharedCtr;
-    private int primeCtr, lowerLimit, upperLimit;
+    private int upperLimit;
 
-    public PrintPrimes3(AtomicInteger atomicInt, int upper, int lower){
+    public PrintPrimes3(AtomicInteger atomicInt, int upper){
         this.sharedCtr = atomicInt;
-        this.primeCtr = lower;
         this.upperLimit = upper;
     }
     

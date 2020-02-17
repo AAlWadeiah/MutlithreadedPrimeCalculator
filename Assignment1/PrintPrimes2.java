@@ -1,11 +1,10 @@
 public class PrintPrimes2 implements Runnable{
 
     private OTLock[] locks;
-    private int primeCtr, upperLimit;
+    private int upperLimit;
 
-    public PrintPrimes2(OTLock[] locks, int upper, int lower){
+    public PrintPrimes2(OTLock[] locks, int upper){
         this.locks = locks;
-        this.primeCtr = lower;
         this.upperLimit = upper;
     }
 
