@@ -1,8 +1,19 @@
-public class PrimeTesterVar2 implements Runnable{
+import java.util.concurrent.atomic.AtomicInteger;
 
+public class PrintPrimes3 implements Runnable{
+
+    private AtomicInteger sharedCtr;
+    private int primeCtr, lowerLimit, upperLimit;
+
+    public PrintPrimes3(AtomicInteger atomicInt, int upper, int lower){
+        this.sharedCtr = atomicInt;
+        this.primeCtr = lower;
+        this.upperLimit = upper;
+    }
+    
     @Override
     public void run() {
-        // TODO Auto-generated method stub
+        
 
     }
     
@@ -16,5 +27,4 @@ public class PrimeTesterVar2 implements Runnable{
         }
         return true;	
     }
-
 }

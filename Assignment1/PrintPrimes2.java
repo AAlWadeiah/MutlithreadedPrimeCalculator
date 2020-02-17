@@ -1,11 +1,20 @@
-public class PrimeTesterVar3 implements Runnable{
-    
+public class PrintPrimes2 implements Runnable{
+
+    private OTLock[] locks;
+    private int primeCtr, upperLimit;
+
+    public PrintPrimes2(OTLock[] locks, int upper, int lower){
+        this.locks = locks;
+        this.primeCtr = lower;
+        this.upperLimit = upper;
+    }
+
     @Override
     public void run() {
-        // TODO Auto-generated method stub
+        
 
     }
-    
+
     static boolean isPrime(long n){
         if(n < 2) return false;
         if(n == 2 || n == 3) return true;
