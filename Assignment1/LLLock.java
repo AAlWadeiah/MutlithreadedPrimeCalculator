@@ -6,24 +6,21 @@ This implementation of LLLock uses Lamport's Bakery algorithm.
 The following was used as a reference:
     The Art of Multiprocessor Programming by Maurice Herlihy and Nir Shavit, page 32
 */
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 
 public class LLLock {
-    private volatile List<Boolean> flag;
-    private volatile List<Integer> ticket;
+    private volatile boolean[] flag;
+    private volatile int[] ticket;
     private static int numberOfThreads;
 
     public LLLock(int n){
-        flag = new ArrayList<>();
-        ticket = new ArrayList<>();
+        flag = new boolean[n];
+        ticket = new int[n];
         numberOfThreads = n;
 
         for(int i = 0; i < n; i++){
-            flag.add(false);
-            ticket.add(0);
+            flag[i] = false;
+            ticket[i] = 0;
         }
     }
 
@@ -31,19 +28,19 @@ public class LLLock {
         // Execute doorway() to get ticket number
         int id = (int) getThreadID();
         doorway(id);
-        for(int k = 1; k <= flag.size(); k++){
-           while(flag.get(k) && (ticket.get(k) < ticket.get(id) || ( ticket.get(k) == ticket.get(id) && k < id))) { /* do nothing */ }
+        for(int k = 0; k < numberOfThreads; k++){
+           while(k != id && flag[k] && (ticket[k] < ticket[id] || ( ticket[k] == ticket[id] && k < id))) { /* do nothing */ }
         }
     }
 
     public void unlock(){
-        flag.set( (int) getThreadID(), false);
+        flag[(int) getThreadID()] = false;
     }
 
     private void doorway(int id){
-        flag.set(id, true);
-        Integer max = Collections.max(ticket);
-        ticket.set(id, max + 1);
+        flag[id] = true;
+        int max = Arrays.stream(ticket).max().getAsInt();
+        ticket[id] = max + 1;
     }
 
     private long getThreadID(){ return Thread.currentThread().getId() % numberOfThreads; }

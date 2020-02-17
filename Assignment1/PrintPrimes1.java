@@ -1,25 +1,24 @@
 public class PrintPrimes1 implements Runnable{
 
     private LLLock lock;
-    private int primeCtr, lowerLimit, upperLimit;;
+    private int upperLimit;;
 
-    public PrintPrimes1(LLLock lock, int upper, int lower){
+    public PrintPrimes1(LLLock lock, int upper){
         this.lock = lock;
-        this.primeCtr = lower;
         this.upperLimit = upper;
     }
     
     @Override
     public void run() {
-        int n;
-        do {
+        int n = 0;
+        while (n <= upperLimit) {
             lock.lock();
-            n = primeCtr;
-            primeCtr++;
+            n = Main.sharedCtr;
+            Main.sharedCtr++;
             lock.unlock();
+            if(n <= upperLimit && isPrime(n))
+                System.out.println(n);
         }
-        while (primeCtr <= upperLimit);
-
     }
 
     static boolean isPrime(long n){
